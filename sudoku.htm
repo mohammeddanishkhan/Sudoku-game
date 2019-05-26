@@ -1,0 +1,236 @@
+
+
+<html>
+<head>
+<script src="jquery-3.1.1.min.js" type="text/javascript"></script>
+
+<script language="javascript">
+var sudokoArray=[];
+$(document).ready(function()
+		{
+console.log('dnish');
+var baseArray = [];
+
+	
+			 
+            for (var i = 0; i < 9; i++) {
+                var gen_num = parseInt((Math.random() * (9)) + 1);
+                do {
+                    var is_exist = baseArray.indexOf(gen_num);
+                    if (is_exist >= 0) {
+                        gen_num = parseInt((Math.random() * (9)) + 1);
+                    }
+                    else {
+                        baseArray.push(gen_num);
+                        is_exist = -2;
+                    }
+                }
+                while (is_exist > -1);
+            }
+var x1=	baseArray.slice(0, 3);
+var x2=	baseArray.slice(3, 6);
+var x3=	baseArray.slice(6, 9);
+var tempArray=[];
+var count=0;
+
+			var k=0;
+			while(k!=3)
+			{
+				x1=shuffle(x1);
+				x2=shuffle(x2);
+				x3=shuffle(x3);
+				for(var j=0;j<=2;j++ )
+				{
+					if(j==0)
+					{
+						sudokoArray.push(x1.concat(x2.concat(x3)));
+						count=count+1;
+					}
+					if(j==1)
+					{
+						sudokoArray.push(x3.concat(x1.concat(x2)));
+						count=count+1;
+					}
+					if(j==2)
+					{
+						sudokoArray.push(x2.concat(x3.concat(x1)));
+						count=count+1;
+					}
+				}
+			k++;
+			}
+console.log('sudokoArray'+sudokoArray);
+
+console.log('sudokoArray'+sudokoArray[1][8]);
+document.getElementById('sudokuTable').innerHTML=createTable(sudokoArray);
+hide();
+
+			
+		});
+	function shuffle(obj)
+	{
+	var temp=[]
+		for(var j=0;j<=1;j++)	
+		{
+		temp[j+1]=obj[j];
+		}
+	temp[0]=obj[j];
+	return temp;
+	}
+
+function createTable(sudokoArray)
+	{
+ 		var result="<div align='center'> <table border=2 width=600 height=500>";
+		for(var i=0;i<sudokoArray.length;i++)
+			{
+				result+="<tr>";
+				for(var j=0;j<sudokoArray[i].length;j++)
+					{
+						result+="<td><input type='number' onchange='check(this);' class='_sudokuValue' readonly='true' id="+i+''+j+" value="+sudokoArray[i][j]+"></td>";
+
+					}
+				result+="</tr>";				
+		
+			}
+result+="</table></div>";
+return result;
+	
+		
+	}
+
+function hide()
+	{
+		for(var i=0;i<=9;i++)
+			{
+			var tempArrayHide=[];
+			var k=5;
+			if(i==3 ||i==5)
+				{
+				k=4;
+				}
+
+				for (var j = 0; j < k; j++) {
+                			var gen_num = parseInt(Math.random() * (9));
+                				do {
+                    					var is_exist = tempArrayHide.indexOf(gen_num);
+                    					if (is_exist >= 0) {
+                        					gen_num = parseInt((Math.random() * (9)) + 1);
+                    							   }
+                    					else {
+                        					tempArrayHide.push(gen_num);
+								$("#"+i+''+gen_num).val('');
+								$("#"+i+''+gen_num).prop('readonly', false);	
+                        					is_exist = -2;
+                    					      }
+                					}
+               						 while (is_exist > -1);
+            					}
+			}	
+	}
+
+function check(obj)
+{
+	var _cellID=$(obj).attr('id');
+	var _cellValue=$("#"+_cellID).val();
+	var _trueIDArray=_cellID.split("");
+	var _trueValue= sudokoArray[_trueIDArray[0]][_trueIDArray[1]]
+
+		if(_cellValue==""||_cellValue==undefined||_cellValue==null)
+			{
+				$('#'+_cellID).removeClass('red');
+				$('#'+_cellID).removeClass('blue');
+			}
+	
+		else if(_cellValue==_trueValue)
+		{
+			$('#'+_cellID).removeClass('red');
+			$('#'+_cellID).addClass('blue');			
+		}
+		else
+		{
+			$('#'+_cellID).addClass('red');
+			$('#'+_cellID).removeClass('blue');	
+		}
+}
+
+</script>
+
+<style type="text/css">
+    
+table {
+ 
+}
+td {
+   border:1px solid; 
+   width:1%; 
+}
+td:first-child {
+  border-left:solid;
+}
+td:nth-child(3n) {
+  border-right:solid ;
+}
+tr:first-child {
+  border-top:solid;
+}
+tr:nth-child(3n) td {
+  border-bottom:solid ;
+}
+input[type=number], select {text-align: center;
+    width: 100%;
+}
+.foo {
+  float: left;
+  width: 20px;
+  height: 20px;
+  margin: 5px;
+  border: 1px solid rgba(0, 0, 0, .2);
+}
+
+.blue {
+  background: #13b4ff;
+}
+
+.red {
+  background: #ff0000;
+}
+
+
+.bg {
+    /* The image used */
+    background-image: url("sudoku.jpg");
+
+    /* Full height */
+    height: 100%; 
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity:3.5;
+}
+    </style>
+<title> SUDOKO </title>
+</head>
+<body>
+
+<div class="bg">
+<div id="sudokuTable">
+</div>
+
+<div class="foo blue"></div>:- Correct Value
+
+</br>
+</br>
+<div class="foo red"></div>:- Wrong Value
+
+</br>
+</br>
+</br>
+<h3><font color="white">The Deisgn of this site is under construction!! Rest you can play the game</font>
+</h3>
+</div>
+</body>
+</html>
+
+
